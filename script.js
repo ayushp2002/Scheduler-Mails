@@ -107,10 +107,11 @@ function handleSignoutClick(event) {
   gapi.auth2.getAuthInstance().signOut();
 }
 
-function handleScheduleClick(event) {
+async function handleScheduleClick(event) {
   var evtctr = 0;
   appendScheduleH("\nScheduling events:");
   for (var i = 0; i < messageslist.length; i++) {
+    await new Promise(r => setTimeout(r, 2000));
     var messageId = messageslist[i].id;
     gapi.client.gmail.users.messages.get({
       userId : 'me',
