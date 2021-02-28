@@ -108,10 +108,9 @@ function handleSignoutClick(event) {
 }
 
 async function handleScheduleClick(event) {
-  var evtctr = 0;
   appendScheduleH("\nScheduling events:");
   for (var i = 0; i < messageslist.length; i++) {
-    await new Promise(r => setTimeout(r, 2000));
+    await new Promise(r => setTimeout(r, 800));
     var messageId = messageslist[i].id;
     gapi.client.gmail.users.messages.get({
       userId : 'me',
@@ -161,10 +160,11 @@ async function handleScheduleClick(event) {
           }
           if (found == false) {
             createNewEvent(classatfull, classatfullend);
-            evtctr++;
+            listUpcomingEvents();
           }
         } else {
           createNewEvent(classatfull, classatfullend);
+          listUpcomingEvents();
         }
     });
   }
@@ -268,6 +268,7 @@ function listUpcomingEvents() {
     'orderBy': 'startTime'
   }).then(function(response) {
     eventslist = response.result.items;
+    document.getElementById('events_h').innerHTML = "";
     appendEventH('\n' + eventslist.length + ' Total event(s):');
 
     if (eventslist.length > 0) {
@@ -280,7 +281,7 @@ function listUpcomingEvents() {
         appendEventList(event.summary + ' (' + when + ')')
       }
     } else {
-      appendEventList('No upcoming events found.');
+      // appendEventList('No upcoming events found.');
     }
   });
 }
