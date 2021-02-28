@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Scheduler Mails</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <h1>Scheduler Mails</h1>
+    <hr>
+
+    <!--Add buttons to initiate auth sequence and sign out-->
+    <button id="authorize_button" style="display: none;float:right;">Authorize</button>
+    <button id="signout_button" style="display: none;float:right;">Sign Out</button>
+    <button id="scheduleevt_button" style="display: none">Schedule events</button>
+
+
+
+    <hr>
+    <h2 id="mails_h"></h2>
+    <ol id="mails_list"></ol>
+    <h2 id="events_h"></h2>
+    <ol id="events_list"></ol>
+    <h2 id="schedule_h"></h2>
+    <ol id="schedule_list"></ol>
+
+    <p id="content" style="white-space: pre-wrap;"></p>
+
+    <script type="text/javascript" src="./script.js"></script>
+
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+  </body>
+</html>
