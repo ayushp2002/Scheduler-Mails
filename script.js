@@ -84,7 +84,7 @@ function updateSigninStatus(isSignedIn) {
     signoutButton.style.display = 'none';
     scheduleButton.style.display = "none";
     document.getElementById('content').innerHTML = "";
-    document.getElementById('mails_list').innerHTML = "";
+    document.getElementById('accordionMails').innerHTML = "";
     document.getElementById('events_list').innerHTML = "";
     document.getElementById('schedule_list').innerHTML = "";
     document.getElementById('mails_h').innerHTML = "";
@@ -120,8 +120,8 @@ async function handleScheduleClick(event) {
         /*
           Extracting all data from the message text
         */
-        classon = msg.slice(msg.search(" on ")+4, msg.search(" by "));
-        classby = msg.slice(msg.search(" by ")+4, msg.search(" is ")-1);
+        // classon = msg.slice(msg.search(" on ")+4, msg.search(" by "));
+        // classby = msg.slice(msg.search(" by ")+4, msg.search(" is ")-1);
         classat = msg.slice(msg.search(" at ")+4, msg.search("Please "));
         classatdate = classat.slice(0, 2);
         classatmont = classat.slice(5, 8);
@@ -132,15 +132,15 @@ async function handleScheduleClick(event) {
         if (classatampm == "pm") {
           classathour = (parseInt(classathour)+12).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
         }
-        if (classon.slice(12, 14) == "ES") {
-          classsub = "Electrical Sciences";
-        } else if (classon.slice(12, 14) == "WP") {
-          classsub = "Writing Practice";
-        } else if (classon.slice(12, 14) == "SL") {
-          classsub = "Symbolic Logic";
-        } else if (classon.slice(12, 14) == "PS") {
-          classsub = "Probablity and Statistics";
-        }
+        // if (classon.slice(12, 14) == "ES") {
+        //   classsub = "Electrical Sciences";
+        // } else if (classon.slice(12, 14) == "WP") {
+        //   classsub = "Writing Practice";
+        // } else if (classon.slice(12, 14) == "SL") {
+        //   classsub = "Symbolic Logic";
+        // } else if (classon.slice(12, 14) == "PS") {
+        //   classsub = "Probablity and Statistics";
+        // }
 
         var classatfull = classatyear + '-' + getMonth(classatmont).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
                                       + '-' + classatdate.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
@@ -205,7 +205,7 @@ function appendMailList(mailhead, mailmessage, index) {
   list.innerHTML += `
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading` + index + `">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapse` + index + `">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse` + index + `" aria-expanded="false" aria-controls="collapse` + index + `">
         ` + mailhead + `
       </button>
     </h2>
@@ -241,7 +241,7 @@ function listMessages() {
     }).then(function(response) {
       messageslist = response.result.messages;
       appendMailH("\n" + messageslist.length + ' Mail(s):');
-
+      var ctr=0;
       if (messageslist && messageslist.length > 0) {
         for (i = 0; i < messageslist.length; i++) {
           var messageId = messageslist[i].id;
@@ -253,7 +253,21 @@ function listMessages() {
               // if (res.result.payload.parts[i].name == "Subject") {
                 // if (res.result.payload.headers[i].value == "") {
                   var msg = atob(res.result.payload.parts[1].body.data.replace(/-/g, '+').replace(/_/g, '/').toString()).replace(/<br\/>/g, "");
-                  appendMailList(msg.slice(0, 20) + "...", msg, i);
+
+                  classon = msg.slice(msg.search(" on ")+4, msg.search(" by "));
+                  classby = msg.slice(msg.search(" by ")+4, msg.search(" is ")-1);
+                  if (classon.slice(12, 14) == "ES") {
+                    classsub = "Electrical Sciences";
+                  } else if (classon.slice(12, 14) == "WP") {
+                    classsub = "Writing Practice";
+                  } else if (classon.slice(12, 14) == "SL") {
+                    classsub = "Symbolic Logic";
+                  } else if (classon.slice(12, 14) == "PS") {
+                    classsub = "Probablity and Statistics";
+                  }
+
+                  appendMailList(classsub + " lecture by " + classby, msg, ctr);
+                  ctr++;
                 // }
                 // break;
               // }
@@ -275,7 +289,7 @@ function listUpcomingEvents() {
     'calendarId': 'primary',
     'showDeleted': false,
     'singleEvents': true,
-    'maxResults': 10,
+    'maxResults': 3,
     'orderBy': 'startTime'
   }).then(function(response) {
     eventslist = response.result.items;

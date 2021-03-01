@@ -5,24 +5,52 @@
     <meta charset="utf-8" />
     <meta name="google-site-verification" content="gWx4HHx4ixtiNoLYntKBKiWBzBtu4pt99VC_iCddxBc" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <!-- <link rel="stylesheet" href="style.css"> -->
     <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet"> -->
+    <style media="screen">
+      body {
+        position: relative;
+        background-image: url('https://images.unsplash.com/photo-1614519679749-3189ec5687d9?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1189&q=80');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        margin: 20px;
+        padding: 10px;
+        border: solid 2px #DDDDDD66;
+        border-radius: 5px;
+        backdrop-filter: blur(20px) brightness(140%) contrast(80%) saturate(50%);
+        /* backdrop-filter: brightness(140%); */
+      }
+      .accordion {
+        background-color: #FFFFFF33;
+      }
+      .accordion-body {
+        background-color: #FFFFFF88;
+        color: #444444;
+      }
+      .accordion-button:not(.collapsed) {
+        background-color: #FFFFFFCC;
+        color: #0c63d4;
+      }
+      h1 {
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
     <h1>Scheduler Mails</h1>
     <hr>
 
     <!--Add buttons to initiate auth sequence and sign out-->
-    <button id="authorize_button" style="display: none;float:right;">Authorize</button>
-    <button id="signout_button" style="display: none;float:right;">Sign Out</button>
-    <button id="scheduleevt_button" style="display: none">Schedule events</button>
+    <button id="authorize_button" style="display: none;float:right;" class="btn btn-success">Authorize</button>
+    <button id="signout_button" style="display: none;float:right;" class="btn btn-danger">Sign Out</button>
+    <button id="scheduleevt_button" style="display: none" class="btn btn-primary">Schedule events</button>
 
-
-
-    <hr>
+    <br><br>
     <h2 id="mails_h"></h2>
-    <div id="accordionMails" class="mails_list accordion"></div>
+    <div id="accordionMails" class="mails_list accordion" style="margin:10px;padding:10px;border-radius:5px;border:solid 1px #CCCCCC"></div>
     <h2 id="events_h"></h2>
     <ol id="events_list"></ol>
     <h2 id="schedule_h"></h2>
