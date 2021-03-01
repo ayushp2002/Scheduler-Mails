@@ -40,6 +40,28 @@
       h1 {
         text-align: center;
       }
+      ol {
+        background-color: #ffffff55;
+        margin: 10px;
+        padding: 5px;
+        border-radius: 5px;
+        border: solid 1px #CCCCCC;
+      }
+      li {
+        list-style: none;
+        margin: 2px;
+        padding: 3px;
+        background-color: #FFFFFF55;
+        border-radius: 5px;
+        border: solid 1px #CCCCCC;
+      }
+      .btn-outline-danger {
+        background-color: #FF798933;
+      }
+      .btn-outline-success {
+        background-color: #6EDCA933;
+        color: #065421;
+      }
     </style>
   </head>
   <body>
@@ -47,8 +69,8 @@
     <hr>
 
     <!--Add buttons to initiate auth sequence and sign out-->
-    <button id="authorize_button" style="display: none;float:right;" class="btn btn-success">Authorize</button>
-    <button id="signout_button" style="display: none;float:right;" class="btn btn-danger">Sign Out</button>
+    <button id="authorize_button" style="display: none;float:right;" class="btn btn-outline-success">Authorize</button>
+    <button id="signout_button" style="display: none;float:right;" class="btn btn-outline-danger">Sign Out</button>
     <button id="scheduleevt_button" style="display: none" class="btn btn-primary">Schedule events</button>
 
     <br><br>
