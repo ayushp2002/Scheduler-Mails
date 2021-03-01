@@ -200,13 +200,6 @@ function appendScheduleH(message) {
   h.appendChild(textContent);
 }
 
-// function appendMailList(message) {
-//   var list = document.getElementById('mails_list');
-//   var textContent = document.createElement('li');
-//   textContent.appendChild(document.createTextNode(message));
-//   list.appendChild(textContent);
-// }
-
 function appendMailList(mailhead, mailmessage, index) {
   var list = document.getElementsByClassName('mails_list');
   list.innerHTML += `
