@@ -201,7 +201,7 @@ function appendScheduleH(message) {
 }
 
 function appendMailList(mailhead, mailmessage, index) {
-  var list = document.getElementsByClassName('mails_list');
+  var list = document.getElementById('accordionMails');
   list.innerHTML += `
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading` + index + `">
