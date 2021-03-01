@@ -200,11 +200,29 @@ function appendScheduleH(message) {
   h.appendChild(textContent);
 }
 
-function appendMailList(message) {
-  var list = document.getElementById('mails_list');
-  var textContent = document.createElement('li');
-  textContent.appendChild(document.createTextNode(message));
-  list.appendChild(textContent);
+// function appendMailList(message) {
+//   var list = document.getElementById('mails_list');
+//   var textContent = document.createElement('li');
+//   textContent.appendChild(document.createTextNode(message));
+//   list.appendChild(textContent);
+// }
+
+function appendMailList(mailhead, mailmessage, index) {
+  var list = document.getElementsByClassName('mails_list');
+  list.innerHTML += `
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading` + index + `">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapse` + index + `">
+        ` + mailhead + `
+      </button>
+    </h2>
+    <div id="collapse` + index + `" class="accordion-collapse collapse" aria-labelledby="heading` + index + `" data-bs-parent="#accordionMails">
+      <div class="accordion-body">
+        ` + mailmessage + `
+      </div>
+    </div>
+  </div>
+  `;
 }
 
 function appendEventList(message) {
@@ -242,7 +260,7 @@ function listMessages() {
               // if (res.result.payload.parts[i].name == "Subject") {
                 // if (res.result.payload.headers[i].value == "") {
                   var msg = atob(res.result.payload.parts[1].body.data.replace(/-/g, '+').replace(/_/g, '/').toString()).replace(/<br\/>/g, "");
-                  appendMailList(msg);
+                  appendMailList(msg.slice(0, 20) + "...", msg, i);
                 // }
                 // break;
               // }
@@ -250,7 +268,7 @@ function listMessages() {
           });
         }
       } else {
-        appendMailList('No Messages found.');
+        appendMailList('No Messages found.', '', 0);
       }
     });
   } catch (e) {
