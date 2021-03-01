@@ -237,7 +237,7 @@ function listMessages() {
     gapi.client.gmail.users.messages.list({
       userId : 'me',
       q : 'label:inbox from:noreply@impartus.com subject:"Impartus - Upcoming Class"',
-      maxResults : 10
+      maxResults : 3
     }).then(function(response) {
       messageslist = response.result.messages;
       appendMailH("\n" + messageslist.length + ' Mail(s):');
@@ -289,7 +289,7 @@ function listUpcomingEvents() {
     'calendarId': 'primary',
     'showDeleted': false,
     'singleEvents': true,
-    'maxResults': 3,
+    'maxResults': 10,
     'orderBy': 'startTime'
   }).then(function(response) {
     eventslist = response.result.items;
