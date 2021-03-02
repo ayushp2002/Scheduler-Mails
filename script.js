@@ -13,6 +13,9 @@ var SCOPES = 'https://www.googleapis.com/auth/gmail.readonly https://www.googlea
 var authorizeButton = document.getElementById('authorize_button');
 var signoutButton = document.getElementById('signout_button');
 var scheduleButton = document.getElementById('scheduleevt_button');
+var deleteButton = document.getElementById('deleteevt_button');
+var refreshButton = document.getElementById('refreshevt_button');
+var clearLogsButton = document.getElementById('clearlogs_button');
 
 /*
   All data extraction to be done in these global variables
@@ -37,6 +40,9 @@ String.prototype.replaceAt = function(index, replacement) {
     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
 }
 
+function confirmDialog(msg) {
+  return confirm(msg);
+}
 /**
  *  On load, called to load the auth2 library and API client library.
  */
@@ -63,6 +69,9 @@ function initClient() {
     authorizeButton.onclick = handleAuthClick;
     signoutButton.onclick = handleSignoutClick;
     scheduleButton.onclick = handleScheduleClick;
+    deleteButton.onclick = handleDeleteEvtClick;
+    refreshButton.onclick = handleRefreshEvtClick;
+    clearLogsButton.onclick = handleClearLogsClick;
   }, function(error) {
     appendPre(JSON.stringify(error, null, 2));
   });
@@ -79,17 +88,23 @@ function updateSigninStatus(isSignedIn) {
     listMessages();
     listUpcomingEvents();
     scheduleButton.style.display = "inline";
+    deleteButton.style.display = "inline";
+    refreshButton.style.display = "inline";
+    clearLogsButton.style.display = "inline";
   } else {
     authorizeButton.style.display = 'inline';
     signoutButton.style.display = 'none';
     scheduleButton.style.display = "none";
+    deleteButton.style.display = "none";
+    refreshButton.style.display = "none";
+    clearLogsButton.style.display = "none";
     document.getElementById('content').innerHTML = "";
     document.getElementById('accordionMails').innerHTML = "";
     document.getElementById('events_list').innerHTML = "";
-    document.getElementById('schedule_list').innerHTML = "";
+    document.getElementById('logs_list').innerHTML = "";
     document.getElementById('mails_h').innerHTML = "";
     document.getElementById('events_h').innerHTML = "";
-    document.getElementById('schedule_h').innerHTML = "";
+    document.getElementById('logs_h').innerHTML = "";
   }
 }
 
@@ -107,10 +122,34 @@ function handleSignoutClick(event) {
   gapi.auth2.getAuthInstance().signOut();
 }
 
-async function handleScheduleClick(event) {
-  appendScheduleH("\nScheduling events:");
-  for (var i = 0; i < messageslist.length; i++) {
+async function handleRefreshEvtClick(event) {
+  refreshButton.classList.add("rotate");
+  document.getElementById('events_list').innerHTML = "";
+  listUpcomingEvents();
+  await new Promise(r => setTimeout(r, 1000));
+  refreshButton.classList.remove("rotate");
+}
+
+function handleClearLogsClick(event) {
+  document.getElementById('logs_list').innerHTML = "";
+}
+
+async function handleDeleteEvtClick(event) {
+  if (confirmDialog("Are you sure you want to delete all events? This action is irreversible.")) {
+    for (var i = 0; i < eventslist.length; i++) {
+      changeLogsH("\nDeleting Events");
+      deleteEvent(eventslist[i].id, eventslist[i].summary);
+    }
     await new Promise(r => setTimeout(r, 800));
+  } else {
+    // appendPre("Not deleting event");
+  }
+  changeLogsH("\nLogs");
+}
+
+async function handleScheduleClick(event) {
+  for (var i = 0; i < messageslist.length; i++) {
+    changeLogsH("\nScheduling Events");
     var messageId = messageslist[i].id;
     gapi.client.gmail.users.messages.get({
       userId : 'me',
@@ -153,21 +192,21 @@ async function handleScheduleClick(event) {
         if (eventslist.length > 0) {
           for (var j = 0; j < eventslist.length; j++) {
             if ((eventslist[j].start.dateTime).toString() == classatfull) {
-              appendScheduleList("Event already found at " + eventslist[j].start.dateTime + " for " + eventslist[j].summary);
+              appendLogsList("Event already found at " + eventslist[j].start.dateTime + " for " + eventslist[j].summary);
               found = true;
               break;
             }
           }
           if (found == false) {
             createNewEvent(classatfull, classatfullend);
-            listUpcomingEvents();
           }
         } else {
           createNewEvent(classatfull, classatfullend);
-          listUpcomingEvents();
         }
     });
+    await new Promise(r => setTimeout(r, 800));
   }
+  changeLogsH("Logs");
 }
 
 /**
@@ -194,10 +233,11 @@ function appendEventH(message) {
   h.appendChild(textContent);
 }
 
-function appendScheduleH(message) {
-  var h = document.getElementById('schedule_h');
-  var textContent = document.createTextNode(message + '\n');
-  h.appendChild(textContent);
+function changeLogsH(message) {
+  var h = document.getElementById('logs_h');
+  // var textContent = document.createTextNode(message + '\n');
+  // h.appendChild(textContent);
+  h.innerHTML = message;
 }
 
 function appendMailList(mailhead, mailmessage, index) {
@@ -225,11 +265,12 @@ function appendEventList(message) {
   list.appendChild(textContent);
 }
 
-function appendScheduleList(message) {
-  var list = document.getElementById('schedule_list');
+function appendLogsList(message) {
+  var list = document.getElementById('logs_list');
   var textContent = document.createElement('li');
   textContent.appendChild(document.createTextNode(message));
   list.appendChild(textContent);
+  window.scrollTo(-50 ,document.body.scrollHeight);
 }
 
 function listMessages() {
@@ -313,31 +354,38 @@ function listUpcomingEvents() {
 
 function createNewEvent(classatfull, classatfullend) {
   var event = {
-  'summary': classsub + " lecture by " + classby,
-  'start': {
-    'dateTime': classatfull,
-    'timeZone': 'Asia/Kolkata'
-  },
-  'end': {
-    'dateTime': classatfullend,
-    'timeZone': 'Asia/Kolkata'
-  },
-  'reminders': {
-    'useDefault': false,
-    'overrides': [
-      {'method': 'popup', 'minutes': 15}
-    ]
-  }
-};
+    'summary': classsub + " lecture by " + classby,
+    'start': {
+      'dateTime': classatfull,
+      'timeZone': 'Asia/Kolkata'
+    },
+    'end': {
+      'dateTime': classatfullend,
+      'timeZone': 'Asia/Kolkata'
+    },
+    'reminders': {
+      'useDefault': false,
+      'overrides': [
+        {'method': 'popup', 'minutes': 15}
+      ]
+    }
+  };
 
-var request = gapi.client.calendar.events.insert({
-  'calendarId': 'primary',
-  'resource': event
-});
+  var request = gapi.client.calendar.events.insert({
+    'calendarId': 'primary',
+    'resource': event
+  });
 
-request.execute(function(event) {
-  appendScheduleList('Event created at ' + classatfull + " for " + event.summary);
-});
+  request.execute(function(event) {
+    appendLogsList('Event created at ' + classatfull + " for " + event.summary);
+  });
+}
 
-
+function deleteEvent(evtId, evtSummary) {
+  gapi.client.calendar.events.delete({
+    'calendarId' : 'primary',
+    'eventId' : evtId
+  }).then(function (response) {
+    appendLogsList("Event " + evtSummary + " deleted.");
+  });
 }
