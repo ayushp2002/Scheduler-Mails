@@ -32,6 +32,7 @@ var classathour;
 var classatmins;
 var eventslist;
 var messageslist;
+var logctr = 0;
 
 function getMonth(monthStr){
     return new Date(monthStr+'-1-01').getMonth()+1
@@ -105,7 +106,7 @@ function updateSigninStatus(isSignedIn) {
     refreshButton.style.display = "inline";
     clearLogsButton.style.display = "inline";
     configsButton.style.display = "inline";
-    document.getElementsByClassName('content_block').style.display = "block";
+    document.getElementById('content_block').style.display = "block";
   } else {
     authorizeButton.style.display = 'inline';
     signoutButton.style.display = 'none';
@@ -114,14 +115,7 @@ function updateSigninStatus(isSignedIn) {
     refreshButton.style.display = "none";
     clearLogsButton.style.display = "none";
     configsButton.style.display = "none";
-    document.getElementById('content').innerHTML = "";
-    document.getElementById('accordionMails').innerHTML = "";
-    document.getElementById('events_list').innerHTML = "";
-    document.getElementById('logs_list').innerHTML = "";
-    document.getElementById('mails_h').innerHTML = "";
-    document.getElementById('events_h').innerHTML = "";
-    document.getElementById('logs_h').innerHTML = "";
-    document.getElementsByClassName('content_block').style.display = "none";
+    document.getElementById('content_block').style.display = "none";
   }
 }
 
@@ -149,6 +143,8 @@ async function handleRefreshEvtClick(event) {
 
 function handleClearLogsClick(event) {
   document.getElementById('logs_list').innerHTML = "";
+  logctr = 0;
+  resetLogsH();
 }
 
 async function handleDeleteEvtClick(event) {
@@ -161,7 +157,7 @@ async function handleDeleteEvtClick(event) {
   } else {
     // appendPre("Not deleting event");
   }
-  changeLogsH("\nLogs:");
+  resetLogsH();
 }
 
 async function handleScheduleClick(event) {
@@ -215,7 +211,7 @@ async function handleScheduleClick(event) {
     });
     await new Promise(r => setTimeout(r, 800));
   }
-  changeLogsH("Logs:");
+  resetLogsH();
 }
 
 /**
@@ -249,6 +245,11 @@ function changeLogsH(message) {
   h.innerHTML = message;
 }
 
+function resetLogsH() {
+  var h = document.getElementById('logs_h');
+  h.innerHTML = logctr + " Logs:";
+}
+
 function appendMailList(mailhead, mailmessage, index) {
   var list = document.getElementById('accordionMails');
   list.innerHTML += `
@@ -279,7 +280,8 @@ function appendLogsList(message) {
   var textContent = document.createElement('li');
   textContent.appendChild(document.createTextNode(message));
   list.appendChild(textContent);
-  window.scrollTo(-50 ,document.body.scrollHeight);
+  window.scrollTo(-50 ,document.getElementById('logs_list').scrollHeight);
+  logctr++;
 }
 
 function listMessages() {
@@ -287,7 +289,7 @@ function listMessages() {
     gapi.client.gmail.users.messages.list({
       userId : 'me',
       q : 'label:inbox from:noreply@impartus.com subject:"Impartus - Upcoming Class"',
-      maxResults : 3
+      // maxResults : 3
     }).then(function(response) {
       messageslist = response.result.messages;
       document.getElementById('mails_h').innerHTML = "";
