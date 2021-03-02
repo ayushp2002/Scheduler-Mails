@@ -43,6 +43,18 @@ String.prototype.replaceAt = function(index, replacement) {
 function confirmDialog(msg) {
   return confirm(msg);
 }
+
+function getClassSub(classon) {
+  if (classon.slice(12, 14) == "ES") {
+    return "Electrical Sciences";
+  } else if (classon.slice(12, 14) == "WP") {
+    return "Writing Practice";
+  } else if (classon.slice(12, 14) == "SL") {
+    return "Symbolic Logic";
+  } else if (classon.slice(12, 14) == "PS") {
+    return "Probablity and Statistics";
+  }
+}
 /**
  *  On load, called to load the auth2 library and API client library.
  */
@@ -123,11 +135,11 @@ function handleSignoutClick(event) {
 }
 
 async function handleRefreshEvtClick(event) {
-  refreshButton.classList.add("rotate");
+  // refreshButton.classList.add("rotate");
   document.getElementById('events_list').innerHTML = "";
   listUpcomingEvents();
   await new Promise(r => setTimeout(r, 1000));
-  refreshButton.classList.remove("rotate");
+  // refreshButton.classList.remove("rotate");
 }
 
 function handleClearLogsClick(event) {
@@ -159,8 +171,8 @@ async function handleScheduleClick(event) {
         /*
           Extracting all data from the message text
         */
-        // classon = msg.slice(msg.search(" on ")+4, msg.search(" by "));
-        // classby = msg.slice(msg.search(" by ")+4, msg.search(" is ")-1);
+        classon = msg.slice(msg.search(" on ")+4, msg.search(" by "));
+        classby = msg.slice(msg.search(" by ")+4, msg.search(" is ")-1);
         classat = msg.slice(msg.search(" at ")+4, msg.search("Please "));
         classatdate = classat.slice(0, 2);
         classatmont = classat.slice(5, 8);
@@ -171,15 +183,7 @@ async function handleScheduleClick(event) {
         if (classatampm == "pm") {
           classathour = (parseInt(classathour)+12).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
         }
-        // if (classon.slice(12, 14) == "ES") {
-        //   classsub = "Electrical Sciences";
-        // } else if (classon.slice(12, 14) == "WP") {
-        //   classsub = "Writing Practice";
-        // } else if (classon.slice(12, 14) == "SL") {
-        //   classsub = "Symbolic Logic";
-        // } else if (classon.slice(12, 14) == "PS") {
-        //   classsub = "Probablity and Statistics";
-        // }
+        classsub = getClassSub(classon);
 
         var classatfull = classatyear + '-' + getMonth(classatmont).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
                                       + '-' + classatdate.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
@@ -201,7 +205,7 @@ async function handleScheduleClick(event) {
             createNewEvent(classatfull, classatfullend);
           }
         } else {
-          createNewEvent(classatfull, classatfullend);
+          createNewEvent(classatfull, classatfullend, classsub, classby);
         }
     });
     await new Promise(r => setTimeout(r, 800));
@@ -297,15 +301,7 @@ function listMessages() {
 
                   classon = msg.slice(msg.search(" on ")+4, msg.search(" by "));
                   classby = msg.slice(msg.search(" by ")+4, msg.search(" is ")-1);
-                  if (classon.slice(12, 14) == "ES") {
-                    classsub = "Electrical Sciences";
-                  } else if (classon.slice(12, 14) == "WP") {
-                    classsub = "Writing Practice";
-                  } else if (classon.slice(12, 14) == "SL") {
-                    classsub = "Symbolic Logic";
-                  } else if (classon.slice(12, 14) == "PS") {
-                    classsub = "Probablity and Statistics";
-                  }
+                  classsub = getClassSub(classon);
 
                   appendMailList(classsub + " lecture by " + classby, msg, ctr);
                   ctr++;
@@ -352,9 +348,9 @@ function listUpcomingEvents() {
   });
 }
 
-function createNewEvent(classatfull, classatfullend) {
+function createNewEvent(classatfull, classatfullend, classSub, classBy) {
   var event = {
-    'summary': classsub + " lecture by " + classby,
+    'summary': classSub + " lecture by " + classBy,
     'start': {
       'dateTime': classatfull,
       'timeZone': 'Asia/Kolkata'

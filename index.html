@@ -64,7 +64,7 @@
         background-color: #6EDCA933;
         color: #065421;
       }
-      @keyframes rotation {
+      /* @keyframes rotation {
         from {
           transform: rotate(0deg);
         }
@@ -74,6 +74,27 @@
       }
       .rotate {
         animation: rotation 1s infinite linear;
+      } */
+      .transparent-button {
+        display:none;
+        float:right;
+        outline:none;
+        border:none;
+        background-color:#00000000;
+        border-radius:50px;
+      }
+      .transparent-button:hover {
+        background-color: #FFFFFF33;
+        box-shadow: 0px 0px 2px #00000044;
+        transition-duration: 0.6s;
+        font-size: 22px;
+      }
+      .transparent-button:active {
+        background-color:#00000000;
+        box-shadow: 0px 0px 0px;
+      }
+      i {
+        font-size: 18px;
       }
     </style>
   </head>
@@ -82,19 +103,20 @@
     <hr>
 
     <!--Add buttons to initiate auth sequence and sign out-->
-    <button id="authorize_button" style="display: none;float:right;" class="btn btn-outline-success">Authorize</button>
-    <button id="signout_button" style="display: none;float:right;" class="btn btn-outline-danger">Sign Out</button>
-    <button id="scheduleevt_button" style="display: none" class="btn btn-primary">Schedule events</button>
-    <button id="deleteevt_button" style="display: none" class="btn btn-danger">Delete all events</button>
+    <button id="scheduleevt_button" style="display: none" class="btn btn-primary"><i class="bi bi-calendar-plus"></i></button>
+    <button id="deleteevt_button" style="display: none" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+    <button id="authorize_button" style="display: none;float:right;" class="btn btn-outline-success">Sign In</button>
+    <button id="signout_button" style="display: none;float:right;" class="btn btn-outline-danger"><i class="bi bi-door-closed"></i></button>
+    <button id="configs_button" style="float:right;margin-right:5px" class="btn btn-outline-dark"><i class="bi bi-gear"></i></button>
 
     <br><br>
     <h2 id="mails_h">Mails</h2>
     <div id="accordionMails" class="mails_list accordion" style="margin:10px;padding:10px;border-radius:5px;border:solid 1px #CCCCCC"></div>
     <h2 id="events_h" style="display:inline">Events</h2>
-    <button id="refreshevt_button" style="display:none;float:right;outline:none;border:none;background-color:#00000000;" ><i class="bi bi-arrow-repeat" style="font-size:22px;"></i></button>
+    <button id="refreshevt_button" class="transparent-button"><i class="bi bi-arrow-repeat"></i></button>
     <ol id="events_list"></ol>
     <h2 id="logs_h" style="display:inline">Logs</h2>
-    <button id="clearlogs_button" style="display:none;float:right;outline:none;border:none;background-color:#00000000;" ><i class="bi bi-x-circle" style="font-size:20px"></i></button>
+    <button id="clearlogs_button" class="transparent-button"><i class="bi bi-x-circle"></i></button>
     <ol id="logs_list"></ol>
 
     <p id="content" style="white-space: pre-wrap;"></p>
