@@ -103,21 +103,33 @@
     <hr>
 
     <!--Add buttons to initiate auth sequence and sign out-->
-    <button id="scheduleevt_button" style="display: none" class="btn btn-primary"><i class="bi bi-calendar-plus"></i></button>
-    <button id="deleteevt_button" style="display: none" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-    <button id="authorize_button" style="display: none;float:right;" class="btn btn-outline-success">Sign In</button>
-    <button id="signout_button" style="display: none;float:right;" class="btn btn-outline-danger"><i class="bi bi-door-closed"></i></button>
-    <button id="configs_button" style="float:right;margin-right:5px" class="btn btn-outline-dark"><i class="bi bi-gear"></i></button>
+    <button id="scheduleevt_button" style="display:none" class="btn btn-primary"><i class="bi bi-calendar-plus"></i></button>
+    <button id="deleteevt_button" style="display:none" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+    <button id="authorize_button" style="width:100%;display:none;float:right;" class="btn btn-outline-success">Sign In</button>
+    <button id="signout_button" style="display:none;float:right;" class="btn btn-outline-danger"><i class="bi bi-door-closed"></i></button>
+    <button id="configs_button" style="display:none;float:right;margin-right:5px" class="btn btn-outline-dark"><i class="bi bi-gear"></i></button>
 
     <br><br>
-    <h2 id="mails_h">Mails</h2>
-    <div id="accordionMails" class="mails_list accordion" style="margin:10px;padding:10px;border-radius:5px;border:solid 1px #CCCCCC"></div>
-    <h2 id="events_h" style="display:inline">Events</h2>
-    <button id="refreshevt_button" class="transparent-button"><i class="bi bi-arrow-repeat"></i></button>
-    <ol id="events_list"></ol>
-    <h2 id="logs_h" style="display:inline">Logs</h2>
-    <button id="clearlogs_button" class="transparent-button"><i class="bi bi-x-circle"></i></button>
-    <ol id="logs_list"></ol>
+    <div class="content_block" style="display:none">
+      <div class="left_block">
+        <div class="mails_block">
+          <h2 id="mails_h">Mails</h2>
+          <div id="accordionMails" class="mails_list accordion" style="margin:10px;padding:10px;border-radius:5px;border:solid 1px #CCCCCC"></div>
+        </div>
+        <div class="events_block">
+          <h2 id="events_h" style="display:inline">Events</h2>
+          <button id="refreshevt_button" class="transparent-button"><i class="bi bi-arrow-repeat"></i></button>
+          <ol id="events_list"></ol>
+        </div>
+      </div>
+      <div class="right_block">
+        <div class="logs_block">
+          <h2 id="logs_h" style="display:inline">Logs:</h2>
+          <button id="clearlogs_button" class="transparent-button"><i class="bi bi-x-circle"></i></button>
+          <ol id="logs_list"></ol>
+        </div>
+      </div>
+    </div>
 
     <p id="content" style="white-space: pre-wrap;"></p>
 

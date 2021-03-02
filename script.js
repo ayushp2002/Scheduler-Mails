@@ -16,6 +16,7 @@ var scheduleButton = document.getElementById('scheduleevt_button');
 var deleteButton = document.getElementById('deleteevt_button');
 var refreshButton = document.getElementById('refreshevt_button');
 var clearLogsButton = document.getElementById('clearlogs_button');
+var configsButton = document.getElementById('configs_button');
 
 /*
   All data extraction to be done in these global variables
@@ -103,6 +104,8 @@ function updateSigninStatus(isSignedIn) {
     deleteButton.style.display = "inline";
     refreshButton.style.display = "inline";
     clearLogsButton.style.display = "inline";
+    configsButton.style.display = "inline";
+    document.getElementsByClassName('content_block').style.display = "block";
   } else {
     authorizeButton.style.display = 'inline';
     signoutButton.style.display = 'none';
@@ -110,6 +113,7 @@ function updateSigninStatus(isSignedIn) {
     deleteButton.style.display = "none";
     refreshButton.style.display = "none";
     clearLogsButton.style.display = "none";
+    configsButton.style.display = "none";
     document.getElementById('content').innerHTML = "";
     document.getElementById('accordionMails').innerHTML = "";
     document.getElementById('events_list').innerHTML = "";
@@ -117,6 +121,7 @@ function updateSigninStatus(isSignedIn) {
     document.getElementById('mails_h').innerHTML = "";
     document.getElementById('events_h').innerHTML = "";
     document.getElementById('logs_h').innerHTML = "";
+    document.getElementsByClassName('content_block').style.display = "none";
   }
 }
 
@@ -156,7 +161,7 @@ async function handleDeleteEvtClick(event) {
   } else {
     // appendPre("Not deleting event");
   }
-  changeLogsH("\nLogs");
+  changeLogsH("\nLogs:");
 }
 
 async function handleScheduleClick(event) {
@@ -210,7 +215,7 @@ async function handleScheduleClick(event) {
     });
     await new Promise(r => setTimeout(r, 800));
   }
-  changeLogsH("Logs");
+  changeLogsH("Logs:");
 }
 
 /**
@@ -285,6 +290,7 @@ function listMessages() {
       maxResults : 3
     }).then(function(response) {
       messageslist = response.result.messages;
+      document.getElementById('mails_h').innerHTML = "";
       appendMailH("\n" + messageslist.length + ' Mail(s):');
       var ctr=0;
       if (messageslist && messageslist.length > 0) {
@@ -331,7 +337,7 @@ function listUpcomingEvents() {
   }).then(function(response) {
     eventslist = response.result.items;
     document.getElementById('events_h').innerHTML = "";
-    appendEventH('\n' + eventslist.length + ' Total event(s):');
+    appendEventH('\n' + eventslist.length + ' Event(s):');
 
     if (eventslist.length > 0) {
       for (i = 0; i < eventslist.length; i++) {
